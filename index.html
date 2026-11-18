@@ -245,9 +245,12 @@ const longLabel=k=>cap(dateOf(k).toLocaleDateString("fr-FR",{weekday:"long",day:
 function defaultMeal(){const h=new Date().getHours()+new Date().getMinutes()/60;return h<10.5?"pdj":h<15?"dej":h<18.5?"col":"din"}
 
 /* ---------- état ---------- */
-function defaults(){return{settings:{goals:{kcal:2800,p:160,g:330,f:85,w:2500},goalsSet:false,custom:[],favs:[]},days:{}}}
-function normSettings(s){const d=defaults().settings;s=s||{};return{goals:Object.assign({},d.goals,s.goals||{}),goalsSet:!!s.goalsSet,custom:Array.isArray(s.custom)?s.custom:[],favs:Array.isArray(s.favs)?s.favs:[]}}
-function load(){try{const r=JSON.parse(localStorage.getItem(LS)||"null");if(r&&r.settings)return{settings:normSettings(r.settings),days:r.days||{}}}catch(e){}return defaults()}
+function defaults(){return{settings:{goals:{kcal:3100,p:135,g:450,f:85,w:3000},goalsSet:true,custom:[],favs:[],preset:1},days:{}}}
+function normSettings(s){const d=defaults().settings;s=s||{};return{goals:Object.assign({},d.goals,s.goals||{}),goalsSet:!!s.goalsSet,custom:Array.isArray(s.custom)?s.custom:[],favs:Array.isArray(s.favs)?s.favs:[],preset:s.preset||0}}
+const PRESET={id:1,goals:{kcal:3100,p:135,g:450,f:85,w:3000}};
+function load(){try{const r=JSON.parse(localStorage.getItem(LS)||"null");if(r&&r.settings){const st={settings:normSettings(r.settings),days:r.days||{}};
+  if(st.settings.preset<PRESET.id){st.settings.goals=Object.assign({},PRESET.goals);st.settings.goalsSet=true;st.settings.preset=PRESET.id;try{localStorage.setItem(LS,JSON.stringify(st))}catch(e){}}
+  return st}}catch(e){}return defaults()}
 let S=load();
 function cache(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 const dayOf=k=>S.days[k]||{entries:[],water:0};

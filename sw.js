@@ -1,5 +1,5 @@
 // My-k-prot : fonctionne hors ligne. Change VERSION à chaque mise à jour.
-const VERSION = "my-k-prot-v2";
+const VERSION = "my-k-prot-v3";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener("activate", e => {
